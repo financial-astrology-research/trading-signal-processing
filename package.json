@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "dependencies": {
     "cross-fetch": "^3.0.6",
+    "lodash": "^4.17.20",
     "serverless-dotenv-plugin": "^3.0.0"
   },
   "devDependencies": {
