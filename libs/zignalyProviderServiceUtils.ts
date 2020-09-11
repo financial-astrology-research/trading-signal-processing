@@ -7,16 +7,18 @@ export async function postSignal(payload: any) {
     headers: {
       "Content-Type": "application/json",
     },
-    redirect: "follow",
     body: JSON.stringify(payload),
   };
 
   try {
     const response = await fetch(endpointUrl, options);
-    const data = await response.text();
+    const message = await response.text();
+
     console.log("STATUS: ", response.status);
-    console.log("DATA: ", data);
-    return data;
+    if (message) {
+      console.log("Message: ", message);
+    }
+    return message;
   } catch (e) {
     console.error("ERROR: ", e);
   }
@@ -33,7 +35,7 @@ export async function postSignal(payload: any) {
  * @param {number} [trailingStopTriggerPercent] Percentage that price should move in the trade direction to trigger the trailing stop.
  * @param {number} [trailingStopDistancePercent] Percentage of highest price distance to keep for the trailing stop.
  */
-export async function composeFuturesMarketEntrySignal(
+export function composeFuturesMarketEntrySignal(
   symbol: string,
   size: number,
   side: string,
