@@ -1,5 +1,5 @@
 import { TradingViewStrategySignal } from "../handler";
-import { every } from "lodash";
+import { every, isEmpty } from "lodash";
 
 /**
  * Filter manager is a service responsible of filter noise through filter rules functions.
@@ -36,6 +36,8 @@ class filterSignalManagerService {
       const filterResult = filterFunction(signalData);
       filterResults.push(filterResult);
     });
+
+    return every(filterResults, !isEmpty);
   }
 }
 
