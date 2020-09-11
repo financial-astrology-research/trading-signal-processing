@@ -2,7 +2,7 @@
 
 Considering that platforms like Trading View has some limited capabilities on the trading indicators you can use and there is way to support machine learning algorithms one simple solution I considered is to generate a CSV file from daily or hourly cronjob (depending on your trading frequency) that can output time serie buy / sell rows indexed by Date.
 
-For example a daily CSV trading indicator for EOSUSDT could be generated from this cronjob and output a ML-EOS-daily.csv file with the following format:
+For example a daily CSV trading indicator for EOSUSDT could be generated from this cronjob and output a EOSUSDT-daily.csv file with the following format:
 
 | Date       | Action |
 | ---------- | ------ |
@@ -11,7 +11,7 @@ For example a daily CSV trading indicator for EOSUSDT could be generated from th
 | 2020-08-22 | sell   |
 | 2020-08-23 | sell   |
 
-Or in hour ly format a ML-EOS-hourly.csv
+Or in hour ly format a EOSUSDT-hourly.csv
 
 | Date       | Hour | Action |
 | ---------- | ---- | ------ |
