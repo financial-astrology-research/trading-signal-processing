@@ -4,6 +4,7 @@ import {
   postSignal,
 } from "./libs/zignalyProviderServiceUtils";
 import { responseSuccess, responseError } from "./libs/responseMessage";
+import filterSignalManager from "./libs/filterSignalService";
 
 export interface TradingViewStrategySignal {
   exchangeDate: string;
@@ -66,8 +67,8 @@ export const trading_view_strategy_signal: Handler = (event: any) => {
   const payload = event.body || "{}";
   const signalData = JSON.parse(payload);
   console.log("TV Signal: ", signalData);
-  const zignalySignal = mapTradingViewSignalToZignaly(signalData);
 
+  const zignalySignal = mapTradingViewSignalToZignaly(signalData);
   if (zignalySignal) {
     console.log("Zignaly Signal: ", zignalySignal);
     postSignal(zignalySignal);
