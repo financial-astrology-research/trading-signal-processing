@@ -35,6 +35,9 @@ const mapTradingViewSignalToZignaly = (
   const defaultLeverage: number = 1;
   const trailingStopPercentage: number = 2;
   const trailingStopDistancePercent: number = 2;
+  const stopLossPercentageDigested = stopLossPercent
+    ? stopLossPercent * 100
+    : null;
 
   switch (signalData.orderType) {
     case "entry":
@@ -43,7 +46,7 @@ const mapTradingViewSignalToZignaly = (
         defaultPositionSizePercent,
         side,
         defaultLeverage,
-        stopLossPercent || defaultStopLossPercentage,
+        stopLossPercentageDigested || defaultStopLossPercentage,
         trailingStopPercentage,
         trailingStopDistancePercent,
       );
