@@ -26,27 +26,29 @@ export async function postSignal(payload: any) {
  * Compose Zignaly futures market short entry signal.
  *
  * @param {string} symbol Symbol code to trade without currency separation: i.e. BTCUSDT.
- * @param {number} positionSize Percentage position size calculated from provider service allocated balance.
+ * @param {number} size Percentage position size calculated from provider service allocated balance.
+ * @param {string} side Position side: (short or long).
  * @param {number} leverage Leverage factor, position size is multiplied by it, increase the risk.
  * @param {number} [stopLossPercentage] Percentage to calculate the stop loss price from the final entry price.
  * @param {number} [trailingStopTriggerPercent] Percentage that price should move in the trade direction to trigger the trailing stop.
  * @param {number} [trailingStopDistancePercent] Percentage of highest price distance to keep for the trailing stop.
  */
-export async function composeFuturesMarketShortEntrySignal(
-  symbol,
-  positionSize,
-  leverage,
-  stopLossPercentage = undefined,
-  trailingStopTriggerPercent = undefined,
-  trailingStopDistancePercent = undefined,
+export async function composeFuturesMarketEntrySignal(
+  symbol: string,
+  size: number,
+  side: string,
+  leverage: number,
+  stopLossPercentage: number,
+  trailingStopTriggerPercent: number,
+  trailingStopDistancePercent: number,
 ) {
   const marketSignal = {
     type: "entry",
-    side: "short",
     orderType: "market",
     exchange: "Zignaly",
+    side: side,
     pair: symbol,
-    positionSizePercentage: positionSize,
+    positionSizePercentage: size,
     stopLossPercentage: stopLossPercentage || false,
     leverage: leverage || 1,
     exchangeAccountType: "futures",
@@ -54,38 +56,6 @@ export async function composeFuturesMarketShortEntrySignal(
     trailingStopPercentage: trailingStopDistancePercent || false,
     providerKey: process.env.ZIGNALY_PROVIDER_KEY,
   };
-}
 
-/**
- * Compose Zignaly futures market long entry signal.
- *
- * @param {string} symbol Symbol code to trade without currency separation: i.e. BTCUSDT.
- * @param {number} positionSize Percentage position size calculated from provider service allocated balance.
- * @param {number} leverage Leverage factor, position size is multiplied by it, increase the risk.
- * @param {number} [stopLossPercentage] Percentage to calculate the stop loss price from the final entry price.
- * @param {number} [trailingStopTriggerPercent] Percentage that price should move in the trade direction to trigger the trailing stop.
- * @param {number} [trailingStopDistancePercent] Percentage of highest price distance to keep for the trailing stop.
- */
-export async function composeFuturesMarketLongEntrySignal(
-  symbol,
-  positionSize,
-  leverage,
-  stopLossPercentage = undefined,
-  trailingStopTriggerPercent = undefined,
-  trailingStopDistancePercent = undefined,
-) {
-  const marketSignal = {
-    type: "entry",
-    side: "long",
-    orderType: "market",
-    exchange: "Zignaly",
-    pair: symbol,
-    positionSizePercentage: positionSize,
-    stopLossPercentage: stopLossPercentage || false,
-    leverage: leverage || 1,
-    exchangeAccountType: "futures",
-    trailingStopTriggerPercent: trailingStopTriggerPercent || false,
-    trailingStopPercentage: trailingStopDistancePercent || false,
-    providerKey: process.env.ZIGNALY_PROVIDER_KEY,
-  };
+  return marketSignal;
 }
