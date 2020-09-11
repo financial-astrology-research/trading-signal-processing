@@ -2,7 +2,9 @@
   "name": "serverless-trading-signal-processing",
   "description": "",
   "version": "0.1.0",
-  "dependencies": {},
+  "dependencies": {
+    "cross-fetch": "^3.0.6"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.61",
     "serverless": "^1.78.1",
