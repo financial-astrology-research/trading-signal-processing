@@ -6,7 +6,7 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.61",
     "serverless": "^1.78.1",
-    "serverless-offline": "^6.5.0",
+    "serverless-offline": "^6.7.0",
     "serverless-plugin-typescript": "^1.1.9",
     "typescript": "^3.9.7"
   }
