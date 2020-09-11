@@ -4,7 +4,7 @@ import {
   postSignal,
 } from "./libs/zignalyProviderServiceUtils";
 import { responseSuccess, responseError } from "./libs/responseMessage";
-import filterSignalManager from "./libs/filterSignalService";
+import filterSignalManager from "./libs/filterSignalManagerService";
 
 export interface TradingViewStrategySignal {
   exchangeDate: string;
