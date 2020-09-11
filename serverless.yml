@@ -1,0 +1,17 @@
+app: serverless-trading-signal-processing
+service: trading-signal-processing
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+functions:
+  hello:
+    handler: handler.trading_view_strategy_signal
+    events:
+      - http:
+          path: /trading-view-strategy-signal
+          method: post
+
+plugins:
+  - serverless-plugin-typescript
