@@ -15,7 +15,7 @@ export async function postSignal(payload: any) {
     const response = await fetch(endpointUrl, options);
     const message = await response.text();
 
-    console.log("STATUS: ", response.status);
+    console.log("Signal post status: ", response.status);
     if (message) {
       console.log("Message: ", message);
     }
@@ -96,8 +96,8 @@ export function composeSpotMarketEntrySignal(
     positionSizePercentage: size,
     stopLossPercentage: stopLossPercentage || false,
     leverage: leverage || 1,
-    trailingStopTriggerPercent: trailingStopTriggerPercent || false,
-    trailingStopPercentage: trailingStopDistancePercent || false,
+    trailingStopTriggerPercentage: trailingStopTriggerPercent || false,
+    trailingStopDistancePercentage: trailingStopDistancePercent || false,
     providerKey: process.env.ZIGNALY_PROVIDER_KEY,
   });
 }
