@@ -1,5 +1,8 @@
 import { Handler } from "aws-lambda";
-import { composeFuturesMarketEntrySignal } from "./libs/zignalyProviderServiceUtils";
+import {
+  composeFuturesMarketEntrySignal,
+  postSignal,
+} from "./libs/zignalyProviderServiceUtils";
 import { responseSuccess, responseError } from "./libs/responseMessage";
 
 export interface TradingViewStrategySignal {
@@ -67,6 +70,7 @@ export const trading_view_strategy_signal: Handler = (event: any) => {
 
   if (zignalySignal) {
     console.log("Zignaly Signal: ", zignalySignal);
+    postSignal(zignalySignal);
     return responseSuccess("OK");
   } else {
     return responseError("KO", "Invalid Trading View signal received.");
