@@ -6,7 +6,7 @@ provider:
   runtime: nodejs12.x
 
 functions:
-  hello:
+  trading_view_strategy_signal:
     handler: handler.trading_view_strategy_signal
     events:
       - http:
