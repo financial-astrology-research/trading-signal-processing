@@ -1,5 +1,6 @@
 import { Handler } from "aws-lambda";
 import { composeFuturesMarketEntrySignal } from "./libs/zignalyProviderServiceUtils";
+import { responseSuccess, responseError } from "./libs/responseMessage";
 
 export interface TradingViewStrategySignal {
   exchangeDate: string;
@@ -55,39 +56,11 @@ const mapTradingViewSignalToZignaly = (
   return null;
 };
 
-const responseSuccess = (message: string) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: message,
-    }),
-  };
-
-  return new Promise((resolve) => {
-    resolve(response);
-  });
-};
-
-const responseError = (message: string, error: string) => {
-  const response = {
-    statusCode: 400,
-    body: JSON.stringify({
-      message,
-      error,
-    }),
-  };
-
-  return new Promise((resolve) => {
-    resolve(response);
-  });
-};
-
 export const trading_view_strategy_signal: Handler = (event: any) => {
   const payload = event.body || "{}";
   const signalData = JSON.parse(payload);
   console.log("TV Signal: ", signalData);
   const zignalySignal = mapTradingViewSignalToZignaly(signalData);
-  console.log("ENV vars: ", process.env);
 
   if (zignalySignal) {
     console.log("Zignaly Signal: ", zignalySignal);
