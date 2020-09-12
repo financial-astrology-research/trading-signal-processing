@@ -16,5 +16,8 @@
     "serverless-offline": "^6.7.0",
     "serverless-plugin-typescript": "^1.1.9",
     "typescript": "^3.9.7"
+  },
+  "scripts": {
+    "tvsignals-logs": "sls logs -f trading_view_strategy_signal -t"
   }
 }
