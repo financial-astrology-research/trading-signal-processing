@@ -1,4 +1,5 @@
 import { Handler } from "aws-lambda";
+import { isObject } from "lodash";
 import {
   composeFuturesMarketEntrySignal,
   postSignal,
@@ -72,10 +73,9 @@ export const trading_view_strategy_signal: Handler = async (event: any) => {
   try {
     const filterCheck = await filterSignalDailyCsvIndicator(signalData);
     const zignalySignal = mapTradingViewSignalToZignaly(signalData);
-    console.log("Zignaly Signal: ", zignalySignal);
 
     // Post to Zignaly if filter checks passed.
-    if (filterCheck) {
+    if (filterCheck && isObject(zignalySignal)) {
       postSignal(zignalySignal);
     } else {
       console.log("Ignored signal due to not pass filtering checks.");
