@@ -6,6 +6,7 @@
     "cross-fetch": "^3.0.6",
     "csvtojson": "^2.0.10",
     "lodash": "^4.17.20",
+    "moment": "^2.27.0",
     "serverless-dotenv-plugin": "^3.0.0"
   },
   "devDependencies": {
