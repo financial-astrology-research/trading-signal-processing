@@ -5,6 +5,7 @@ import {
 } from "./libs/zignalyProviderServiceUtils";
 import { responseSuccess, responseError } from "./libs/responseMessage";
 import filterSignalManager from "./libs/filterSignalManagerService";
+import { filterSignalDailyCsvIndicator } from "./libs/filterSignalUtils";
 
 export interface TradingViewStrategySignal {
   exchangeDate: string;
@@ -60,7 +61,7 @@ const mapTradingViewSignalToZignaly = (
       break;
   }
 
-  return null;
+  throw new Error("Invalid Trading View strategy signal received.");
 };
 
 export const trading_view_strategy_signal: Handler = (event: any) => {
@@ -68,12 +69,20 @@ export const trading_view_strategy_signal: Handler = (event: any) => {
   const signalData = JSON.parse(payload);
   console.log("TV Signal: ", signalData);
 
-  const zignalySignal = mapTradingViewSignalToZignaly(signalData);
-  if (zignalySignal) {
+  try {
+    const filterCheck = filterSignalDailyCsvIndicator(signalData);
+    const zignalySignal = mapTradingViewSignalToZignaly(signalData);
     console.log("Zignaly Signal: ", zignalySignal);
-    postSignal(zignalySignal);
+
+    // Post to Zignaly if filter checks passed.
+    if (filterCheck) {
+      postSignal(zignalySignal);
+    } else {
+      console.log("Ignored signal due to not pass filtering checks.");
+    }
+
     return responseSuccess("OK");
-  } else {
-    return responseError("KO", "Invalid Trading View signal received.");
+  } catch (e) {
+    return responseError("KO", e.message);
   }
 };
