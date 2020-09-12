@@ -64,8 +64,8 @@ export function composeFuturesMarketEntrySignal(
     positionSizePercentage: size,
     stopLossPercentage: stopLossPercentage || false,
     leverage: leverage || 1,
-    trailingStopTriggerPercent: trailingStopTriggerPercent || false,
-    trailingStopPercentage: trailingStopDistancePercent || false,
+    trailingStopTriggerPercentage: trailingStopTriggerPercent || false,
+    trailingStopDistancePercentage: trailingStopDistancePercent || false,
     providerKey: process.env.ZIGNALY_PROVIDER_KEY,
   });
 }
