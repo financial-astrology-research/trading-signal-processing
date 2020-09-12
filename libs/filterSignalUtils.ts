@@ -1,7 +1,8 @@
 import { TradingViewStrategySignal } from "../handler";
-import * as moment from "moment";
-import * as csvtojson from "csvtojson";
 import { every, isEmpty, groupBy } from "lodash";
+import moment from "moment";
+import csvtojson from "csvtojson";
+import S3 from "aws-sdk/clients/s3";
 
 /**
  * Check that signal pass filter daily indicator.
@@ -14,21 +15,29 @@ export async function filterSignalDailyCsvIndicator(
   signalData: TradingViewStrategySignal,
 ) {
   const { symbolCode, side, exchangeDate } = signalData;
-  const indicatorFile =
-    process.cwd() + `/csv_indicators/ml-${symbolCode}-daily.csv`;
+  const indicatorFile = `ml-${symbolCode}-daily.csv`;
   const sideAction = side == "long" ? "buy" : "sell";
   const exchangeDateMoment = moment.utc(exchangeDate, "YYYY-M-D");
   const signalIndex = exchangeDateMoment.format("YYYY-MM-DD");
   let dailyIndicator: any = null;
 
   try {
+    const awsS3 = new S3();
+    const fileStream = awsS3
+      .getObject({
+        Bucket: "trading-signal-processing-indicators",
+        Key: indicatorFile,
+      })
+      .createReadStream();
+
     dailyIndicator = await csvtojson({
       delimiter: "auto",
       quote: "off",
       trim: true,
       headers: ["Date", "Action"],
-    }).fromFile(indicatorFile);
+    }).fromStream(fileStream);
   } catch (e) {
+    console.log("CSV indicator load error: ", e);
     throw new Error(`Load CSV indicator ${indicatorFile} failed`);
   }
 
