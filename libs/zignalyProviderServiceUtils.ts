@@ -23,7 +23,8 @@ export async function postSignal(payload: any) {
     }
     return message;
   } catch (e) {
-    console.log("ERROR: ", e);
+    console.log("Post error: ", e);
+    throw new Error("Post signal to Zignaly failed.");
   }
 }
 

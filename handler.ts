@@ -76,7 +76,7 @@ export const trading_view_strategy_signal: Handler = async (event: any) => {
 
     // Post to Zignaly if filter checks passed.
     if (filterCheck && isObject(zignalySignal)) {
-      postSignal(zignalySignal);
+      await postSignal(zignalySignal);
     } else {
       console.log("Ignored signal due to not pass filtering checks.");
     }
