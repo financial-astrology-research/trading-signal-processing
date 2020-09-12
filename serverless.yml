@@ -4,6 +4,11 @@ service: trading-signal-processing
 provider:
   name: aws
   runtime: nodejs12.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - s3:GetObject
+      Resource: arn:aws:s3:::${env:S3_INDICATORS_BUCKET}/*
 
 functions:
   trading_view_strategy_signal:
