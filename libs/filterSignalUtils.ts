@@ -1,7 +1,7 @@
 import { TradingViewStrategySignal } from "../handler";
 import * as moment from "moment";
 import * as csvtojson from "csvtojson";
-import { every, groupBy } from "lodash";
+import { every, isEmpty, groupBy } from "lodash";
 
 /**
  * Check that signal pass filter daily indicator.
@@ -19,13 +19,22 @@ export async function filterSignalDailyCsvIndicator(
   const sideAction = side == "long" ? "buy" : "sell";
   const exchangeDateMoment = moment.utc(exchangeDate, "YYYY-M-D");
   const signalIndex = exchangeDateMoment.format("YYYY-MM-DD");
+  let dailyIndicator: any = null;
 
-  const dailyIndicator = await csvtojson({
-    delimiter: "auto",
-    quote: "off",
-    trim: true,
-    headers: ["Date", "Action"],
-  }).fromFile(indicatorFile);
+  try {
+    dailyIndicator = await csvtojson({
+      delimiter: "auto",
+      quote: "off",
+      trim: true,
+      headers: ["Date", "Action"],
+    }).fromFile(indicatorFile);
+  } catch (e) {
+    throw new Error(`Load CSV indicator ${indicatorFile} failed`);
+  }
+
+  if (isEmpty(dailyIndicator)) {
+    throw new Error(`CSV indicator ${indicatorFile} is empty`);
+  }
 
   const dailyIndicatorIndex = groupBy(dailyIndicator, "Date");
   const signalDateIndicatorSignals = dailyIndicatorIndex[signalIndex] || null;

@@ -64,13 +64,13 @@ const mapTradingViewSignalToZignaly = (
   throw new Error("Invalid Trading View strategy signal received.");
 };
 
-export const trading_view_strategy_signal: Handler = (event: any) => {
+export const trading_view_strategy_signal: Handler = async (event: any) => {
   const payload = event.body || "{}";
   const signalData = JSON.parse(payload);
   console.log("TV Signal: ", signalData);
 
   try {
-    const filterCheck = filterSignalDailyCsvIndicator(signalData);
+    const filterCheck = await filterSignalDailyCsvIndicator(signalData);
     const zignalySignal = mapTradingViewSignalToZignaly(signalData);
     console.log("Zignaly Signal: ", zignalySignal);
 
@@ -83,6 +83,8 @@ export const trading_view_strategy_signal: Handler = (event: any) => {
 
     return responseSuccess("OK");
   } catch (e) {
-    return responseError("KO", e.message);
+    console.error("ERROR: ", e);
   }
+
+  return responseError("KO", "Error processing Trading View strategy signal.");
 };
