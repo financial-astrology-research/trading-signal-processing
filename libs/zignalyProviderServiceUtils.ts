@@ -15,7 +15,7 @@ export async function postSignal(payload: any) {
     const response = await fetch(endpointUrl, options);
     const message = await response.text();
 
-    console.log("Signal post status: ", response.status);
+    console.log("Zignaly post status: ", response.status);
     if (message) {
       console.log("Message: ", message);
     }
