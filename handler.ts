@@ -35,7 +35,7 @@ const mapTradingViewSignalToZignaly = (
     stopLossPercent,
     exchangeId,
   } = signalData;
-  const defaultPositionSizePercent: number = 3;
+  const defaultPositionSizePercent: number = 2;
   const defaultStopLossPercentage: number = 2;
   const defaultLeverage: number = 1;
   const trailingStopPercentage: number = 2;
