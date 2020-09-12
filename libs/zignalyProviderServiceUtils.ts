@@ -12,11 +12,11 @@ export async function postSignal(payload: any) {
   };
 
   try {
-    console.log("POST signal to Zignaly endpoint: ", endpointUrl);
+    console.log(`POST signal to Zignaly endpoint: ${endpointUrl}:\n`, payload);
     const response = await fetch(endpointUrl, options);
-    const message = await response.text();
-
     console.log("Zignaly post status: ", response.status);
+
+    const message = await response.text();
     if (message) {
       console.log("Message: ", message);
     }
