@@ -25,7 +25,7 @@ export async function filterSignalDailyCsvIndicator(
     const awsS3 = new S3();
     const fileStream = awsS3
       .getObject({
-        Bucket: "trading-signal-processing-indicators",
+        Bucket: process.env.S3_INDICATORS_BUCKET || "",
         Key: indicatorFile,
       })
       .createReadStream();
