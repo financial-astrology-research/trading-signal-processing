@@ -2,7 +2,7 @@ import { TradingViewStrategySignal } from "../handler";
 import { every, isEmpty, groupBy } from "lodash";
 import moment from "moment";
 import csvtojson from "csvtojson";
-import S3 from "aws-sdk/clients/s3";
+import * as AWS from "aws-sdk";
 
 /**
  * Check that signal pass filter daily indicator.
@@ -22,7 +22,7 @@ export async function filterSignalDailyCsvIndicator(
   let dailyIndicator: any = null;
 
   try {
-    const awsS3 = new S3();
+    const awsS3 = new AWS.S3();
     const fileStream = awsS3
       .getObject({
         Bucket: process.env.S3_INDICATORS_BUCKET || "",
