@@ -1,4 +1,4 @@
-import { TradingViewStrategySignal } from "../handler";
+import { TradingViewStrategySignal } from "../types/signalTypes";
 import { every, isEmpty, groupBy } from "lodash";
 import moment from "moment";
 import csvtojson from "csvtojson";

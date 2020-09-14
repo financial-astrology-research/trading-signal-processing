@@ -7,24 +7,7 @@ import {
 import { responseSuccess, responseError } from "./libs/responseMessage";
 import filterSignalManager from "./libs/filterSignalManagerService";
 import { filterSignalDailyCsvIndicator } from "./libs/filterSignalUtils";
-
-export interface TradingViewStrategySignal {
-  exchangeDate: string;
-  exchangeHour: string;
-  exchangeTimezone: string;
-  orderType: string;
-  side: string;
-  symbolCode: string;
-  symbolId: string;
-  symbolMinTick: string;
-  exchangeId: string;
-  signalPrice: string;
-  entryName: string;
-  channelPeriod: number;
-  crossUnderLimit: number;
-  crossUpperLimit: number;
-  stopLossPercent: number;
-}
+import { TradingViewStrategySignal } from "./signal/signalTypes";
 
 const mapTradingViewSignalToZignaly = (
   signalData: TradingViewStrategySignal,

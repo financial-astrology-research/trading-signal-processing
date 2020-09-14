@@ -1,4 +1,4 @@
-import { TradingViewStrategySignal } from "../handler";
+import { TradingViewStrategySignal } from "../types/signalTypes";
 import { every, isEmpty } from "lodash";
 
 /**
