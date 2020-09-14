@@ -1,5 +1,5 @@
 import { Handler } from "aws-lambda";
-import { isObject } from "lodash";
+import { isObject, isNumber, inRange } from "lodash";
 import {
   composeFuturesMarketEntrySignal,
   postSignal,
@@ -7,37 +7,81 @@ import {
 import { responseSuccess, responseError } from "./libs/responseMessage";
 import filterSignalManager from "./libs/filterSignalManagerService";
 import { filterSignalDailyCsvIndicator } from "./libs/filterSignalUtils";
-import { TradingViewStrategySignal } from "./signal/signalTypes";
+import { TradingViewStrategySignal } from "./types/signalTypes";
+
+const getPositionParamDefaults = () => {
+  const positionSizePercent: number = 2;
+  const leverage: number = 1;
+  const stopLossPercent: number = 2;
+  const trailingStopLongPercent: number = 2;
+  const trailingStopShortPercent: number = 2;
+  const trailingStopTriggerPercent: number = 2;
+
+  return {
+    leverage,
+    positionSizePercent,
+    stopLossPercent,
+    trailingStopLongPercent,
+    trailingStopShortPercent,
+    trailingStopTriggerPercent,
+  };
+};
 
 const mapTradingViewSignalToZignaly = (
   signalData: TradingViewStrategySignal,
 ) => {
+  const defaults = getPositionParamDefaults();
   const {
-    orderType,
+    action,
     side,
     symbolCode,
     stopLossPercent,
+    trailingStopTriggerPercent,
+    trailingStopLongPercent,
+    trailingStopShortPercent,
     exchangeId,
   } = signalData;
-  const defaultPositionSizePercent: number = 2;
-  const defaultStopLossPercentage: number = 2;
-  const defaultLeverage: number = 1;
-  const trailingStopPercentage: number = 2;
-  const trailingStopDistancePercent: number = 2;
-  const stopLossPercentageDigested = stopLossPercent
-    ? stopLossPercent * 100
-    : null;
 
-  switch (signalData.orderType) {
+  const isValidPercentage = (value: number) => {
+    return isNumber(value) && inRange(0.01, 100.01);
+  };
+
+  let finalStopLossPercent = defaults.stopLossPercent;
+  if (isValidPercentage(stopLossPercent)) {
+    finalStopLossPercent = stopLossPercent;
+  }
+
+  let finalTrailingStopTriggerPercent = defaults.trailingStopTriggerPercent;
+  if (isValidPercentage(trailingStopTriggerPercent)) {
+    finalTrailingStopTriggerPercent = trailingStopTriggerPercent;
+  }
+
+  let finalTrailingStopDistancePercent =
+    side == "long"
+      ? defaults.trailingStopLongPercent
+      : defaults.trailingStopShortPercent;
+
+  if (side == "long" && isValidPercentage(trailingStopLongPercent)) {
+    finalTrailingStopDistancePercent = trailingStopLongPercent;
+  }
+
+  if (side == "short" && isValidPercentage(trailingStopShortPercent)) {
+    finalTrailingStopDistancePercent = trailingStopShortPercent;
+  }
+
+  const finalPositionSizePercent = defaults.positionSizePercent;
+  const finalLeverage = defaults.leverage;
+
+  switch (action) {
     case "entry":
       return composeFuturesMarketEntrySignal(
         symbolCode,
-        defaultPositionSizePercent,
+        finalPositionSizePercent,
         side,
-        defaultLeverage,
-        stopLossPercentageDigested || defaultStopLossPercentage,
-        trailingStopPercentage,
-        trailingStopDistancePercent,
+        finalLeverage,
+        finalStopLossPercent,
+        finalTrailingStopTriggerPercent,
+        finalTrailingStopDistancePercent,
       );
       break;
 
@@ -59,7 +103,7 @@ export const trading_view_strategy_signal: Handler = async (event: any) => {
 
     // Post to Zignaly if filter checks passed.
     if (filterCheck && isObject(zignalySignal)) {
-      await postSignal(zignalySignal);
+      // await postSignal(zignalySignal);
     } else {
       console.log("Ignored signal due to not pass filtering checks.");
     }

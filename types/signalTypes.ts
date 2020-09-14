@@ -1,17 +1,20 @@
 export interface TradingViewStrategySignal {
-  exchangeDate: string;
-  exchangeHour: string;
-  exchangeTimezone: string;
+  date: string;
+  hour: string;
+  timezone: string;
   orderType: string;
+  action: string;
   side: string;
   symbolCode: string;
   symbolId: string;
   symbolMinTick: string;
   exchangeId: string;
   signalPrice: string;
-  entryName: string;
-  channelPeriod: number;
+  oscillatorPeriod: number;
   crossUnderLimit: number;
   crossUpperLimit: number;
   stopLossPercent: number;
+  trailingStopTriggerPercent: number;
+  trailingStopShortPercent: number;
+  trailingStopLongPercent: number;
 }

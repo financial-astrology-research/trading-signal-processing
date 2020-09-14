@@ -14,10 +14,10 @@ import * as AWS from "aws-sdk";
 export async function filterSignalDailyCsvIndicator(
   signalData: TradingViewStrategySignal,
 ) {
-  const { symbolCode, side, exchangeDate } = signalData;
+  const { symbolCode, side, date } = signalData;
   const indicatorFile = `ml-${symbolCode}-daily.csv`;
   const sideAction = side == "long" ? "buy" : "sell";
-  const exchangeDateMoment = moment.utc(exchangeDate, "YYYY-M-D");
+  const exchangeDateMoment = moment.utc(date, "YYYY-M-D");
   const signalIndex = exchangeDateMoment.format("YYYY-MM-DD");
   let dailyIndicator: any = null;
 
