@@ -100,6 +100,7 @@ export const trading_view_strategy_signal: Handler = async (event: any) => {
   try {
     const filterCheck = await filterSignalDailyCsvIndicator(signalData);
     const zignalySignal = mapTradingViewSignalToZignaly(signalData);
+    console.log("Composed Zignaly Signal: ", zignalySignal);
 
     // Post to Zignaly if filter checks passed.
     if (filterCheck && isObject(zignalySignal)) {
