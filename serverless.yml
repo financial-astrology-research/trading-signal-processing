@@ -1,6 +1,10 @@
 app: serverless-trading-signal-processing
 service: trading-signal-processing
 
+custom:
+  serverless-offline:
+    allowCache: true
+
 provider:
   name: aws
   runtime: nodejs12.x
