@@ -10,7 +10,7 @@ import { filterSignalDailyCsvIndicator } from "./libs/filterSignalUtils";
 import { TradingViewStrategySignal } from "./types/signalTypes";
 
 const getPositionParamDefaults = () => {
-  const positionSizePercent: number = 2;
+  const positionSizePercent: number = 20;
   const leverage: number = 1;
   const stopLossPercent: number = 2;
   const trailingStopLongPercent: number = 2;
