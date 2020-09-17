@@ -13,7 +13,7 @@ export const responseSuccess = (message: string) => {
 
 export const responseError = (message: string, error: string) => {
   const response = {
-    statusCode: 400,
+    statusCode: 200,
     body: JSON.stringify({
       message,
       error,
