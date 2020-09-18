@@ -1,5 +1,5 @@
 import { Handler } from "aws-lambda";
-import { isObject, isNumber, inRange } from "lodash";
+import { isObject, isEmpty, isNumber, inRange } from "lodash";
 import {
   composeFuturesMarketEntrySignal,
   postSignal,
@@ -100,13 +100,23 @@ const mapTradingViewSignalToZignaly = (
   throw new Error("Invalid Trading View strategy signal received.");
 };
 
-export const trading_view_strategy_signal: Handler = async (event: any) => {
-  const payload = event.body || "{}";
+const parseTradingViewPayload = (payload: any) => {
   const signalData: TradingViewStrategySignal = JSON.parse(payload);
-  console.log("TV Signal: ", signalData);
-  const { skipProcessingFilters } = signalData;
 
+  if (!isObject(signalData) || isEmpty(signalData)) {
+    throw new Error("Trading View strategy signal is empty.");
+  }
+
+  return signalData;
+};
+
+export const trading_view_strategy_signal: Handler = async (event: any) => {
   try {
+    const payload = event.body || "{}";
+    const signalData = parseTradingViewPayload(payload);
+    console.log("TV Signal: ", signalData);
+
+    const { skipProcessingFilters } = signalData;
     const filterPass = skipProcessingFilters
       ? true
       : await filterSignalDailyCsvIndicator(signalData);
