@@ -9,6 +9,7 @@ jspm_packages
 # Environment variables.
 .env.production
 .env.development
+.env.test
 .env.*.local
 
 # Indicator files.
