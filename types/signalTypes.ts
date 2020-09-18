@@ -17,4 +17,5 @@ export interface TradingViewStrategySignal {
   trailingStopShortPercent: number;
   trailingStopLongPercent: number;
   providerEnvKey: string;
+  skipProcessingFilters: boolean;
 }

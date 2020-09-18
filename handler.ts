@@ -102,16 +102,19 @@ const mapTradingViewSignalToZignaly = (
 
 export const trading_view_strategy_signal: Handler = async (event: any) => {
   const payload = event.body || "{}";
-  const signalData = JSON.parse(payload);
+  const signalData: TradingViewStrategySignal = JSON.parse(payload);
   console.log("TV Signal: ", signalData);
+  const { skipProcessingFilters } = signalData;
 
   try {
-    const filterCheck = await filterSignalDailyCsvIndicator(signalData);
+    const filterPass = skipProcessingFilters
+      ? true
+      : await filterSignalDailyCsvIndicator(signalData);
     const zignalySignal = mapTradingViewSignalToZignaly(signalData);
     console.log("Composed Zignaly Signal: ", zignalySignal);
 
     // Post to Zignaly if filter checks passed.
-    if (filterCheck && isObject(zignalySignal)) {
+    if (filterPass && isObject(zignalySignal)) {
       await postSignal(zignalySignal);
     } else {
       console.log("Ignored signal due to not pass filtering checks.");
