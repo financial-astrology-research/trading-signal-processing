@@ -10,7 +10,7 @@ export interface TradingViewStrategySignal {
   symbolMinTick: string;
   exchangeId: string;
   signalPrice: string;
-  indicatorSource: string;
+  indicatorType: string;
   indicatorPeriod: number;
   stopLossPercent: number;
   trailingStopTriggerPercent: number;
