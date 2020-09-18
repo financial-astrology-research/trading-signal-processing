@@ -40,6 +40,7 @@ const mapTradingViewSignalToZignaly = (
     trailingStopLongPercent,
     trailingStopShortPercent,
     exchangeId,
+    providerEnvKey,
   } = signalData;
 
   const isValidPercentage = (value: number) => {
@@ -71,6 +72,13 @@ const mapTradingViewSignalToZignaly = (
 
   const finalPositionSizePercent = defaults.positionSizePercent;
   const finalLeverage = defaults.leverage;
+  process.env.ZIGNALY_PROVIDER_KEY = process.env[providerEnvKey] || null;
+
+  if (!process.env.ZIGNALY_PROVIDER_KEY) {
+    throw new Error(
+      `Zignaly provider key not found for env var: '${providerEnvKey}'`,
+    );
+  }
 
   switch (action) {
     case "entry":

@@ -10,11 +10,11 @@ export interface TradingViewStrategySignal {
   symbolMinTick: string;
   exchangeId: string;
   signalPrice: string;
-  oscillatorPeriod: number;
-  crossUnderLimit: number;
-  crossUpperLimit: number;
+  indicatorSource: string;
+  indicatorPeriod: number;
   stopLossPercent: number;
   trailingStopTriggerPercent: number;
   trailingStopShortPercent: number;
   trailingStopLongPercent: number;
+  providerEnvKey: string;
 }
