@@ -1,5 +1,5 @@
 import { TradingViewStrategySignal } from "../types/signalTypes";
-import { every, isEmpty, groupBy } from "lodash";
+import { flatten, every, isEmpty, groupBy, pick, values } from "lodash";
 import moment from "moment";
 import csvtojson from "csvtojson";
 import S3 from "aws-sdk/clients/s3";
@@ -18,7 +18,8 @@ export async function filterSignalDailyCsvIndicator(
   const indicatorFile = `ml-${symbolCode}-daily.csv`;
   const sideAction = side == "long" ? "buy" : "sell";
   const exchangeDateMoment = moment.utc(date, "YYYY-M-D");
-  const signalIndex = exchangeDateMoment.format("YYYY-MM-DD");
+  const signalIndex1 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
+  const signalIndex2 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
   let dailyIndicator: any = null;
 
   try {
@@ -46,20 +47,23 @@ export async function filterSignalDailyCsvIndicator(
   }
 
   const dailyIndicatorIndex = groupBy(dailyIndicator, "Date");
-  const signalDateIndicatorSignals = dailyIndicatorIndex[signalIndex] || null;
+  const signalIndexes = [signalIndex1, signalIndex2];
+  const signalDateIndicatorSignals = flatten(
+    values(pick(dailyIndicatorIndex, signalIndexes)),
+  );
 
   if (!signalDateIndicatorSignals) {
     throw new Error(
-      `No CSV ${indicatorFile} indicator signals found for date ${signalIndex}`,
+      `No CSV ${indicatorFile} indicator signals found for date ${signalIndex1}`,
     );
   }
 
-  const signalDateActions = signalDateIndicatorSignals.map(
-    (signal) => signal.Action,
-  );
+  const signalDateActions = signalDateIndicatorSignals.map((signal: any) => {
+    return signal.Action;
+  });
 
   console.log(
-    `Confirm TV signal "${sideAction}" with CSV ${signalIndex} signals:`,
+    `Confirm TV signal "${sideAction}" with CSV ${signalIndexes.toString()} signals:`,
     signalDateActions,
   );
 
