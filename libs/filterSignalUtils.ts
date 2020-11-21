@@ -14,13 +14,21 @@ import S3 from "aws-sdk/clients/s3";
 export async function filterSignalDailyCsvIndicator(
   signalData: TradingViewStrategySignal,
 ) {
-  const { symbolCode, side, date } = signalData;
+  const { symbolCode, side, date, hour } = signalData;
   const indicatorFile = `ml-${symbolCode}-daily.csv`;
   const sideAction = side == "long" ? "buy" : "sell";
-  const exchangeDateMoment = moment.utc(date, "YYYY-M-D");
-  const signalIndex1 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
-  const signalIndex2 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
+  const dateTime = `${date} ${hour}`;
+  const exchangeDateMoment = moment.utc(dateTime, "YYYY-M-D H:m:s");
+  const signalHour: number = parseInt(exchangeDateMoment.format("H"));
   let dailyIndicator: any = null;
+
+  let signalIndex1 = exchangeDateMoment.format("YYYY-MM-DD");
+  let signalIndex2 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
+  // When more than half of current day is elapsed use trend indicator signals from next days.
+  if (signalHour > 14) {
+    signalIndex1 = signalIndex2;
+    signalIndex2 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
+  }
 
   try {
     const awsS3 = new S3();
