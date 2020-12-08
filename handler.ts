@@ -2,6 +2,7 @@ import { Handler } from "aws-lambda";
 import { isObject, isEmpty, isNumber, inRange } from "lodash";
 import {
   composeFuturesMarketEntrySignal,
+  composeFuturesMarketExitSignal,
   postSignal,
 } from "./libs/zignalyProviderServiceUtils";
 import { responseSuccess, responseError } from "./libs/responseMessage";
@@ -93,6 +94,10 @@ const mapTradingViewSignalToZignaly = (
       );
       break;
 
+    case "exit":
+      return composeFuturesMarketExitSignal(symbolCode, side);
+      break;
+
     default:
       break;
   }
@@ -117,14 +122,19 @@ export const trading_view_strategy_signal: Handler = async (event: any) => {
     console.log("TV Signal: ", signalData);
 
     const { skipProcessingFilters } = signalData;
-    const filterPass = skipProcessingFilters
-      ? true
-      : await filterSignalDailyCsvIndicator(signalData);
     const zignalySignal = mapTradingViewSignalToZignaly(signalData);
     console.log("Composed Zignaly Signal: ", zignalySignal);
 
-    // Post to Zignaly if filter checks passed.
+    // Consider CSV signals for entry signals only.
+    let filterPass: boolean = true;
+    if (zignalySignal.type === "entry") {
+      filterPass = skipProcessingFilters
+        ? true
+        : await filterSignalDailyCsvIndicator(signalData);
+    }
+
     if (filterPass && isObject(zignalySignal)) {
+      // Post to Zignaly if filter checks passed.
       await postSignal(zignalySignal);
     } else {
       console.log("Ignored signal due to not pass filtering checks.");

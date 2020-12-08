@@ -42,6 +42,14 @@ function composeBaseEntrySignal(
   };
 }
 
+function composeBaseExitSignal(exchange: string, exchangeType: string) {
+  return {
+    type: "exit",
+    exchange,
+    exchangeAccountType: exchangeType,
+  };
+}
+
 /**
  * Compose Zignaly futures exchange market entry signal.
  *
@@ -70,6 +78,19 @@ export function composeFuturesMarketEntrySignal(
     leverage: leverage || 1,
     trailingStopTriggerPercentage: trailingStopTriggerPercent || false,
     trailingStopDistancePercentage: trailingStopDistancePercent || false,
+    providerKey: process.env.ZIGNALY_PROVIDER_KEY,
+  });
+}
+
+/**
+ * Compose Zignaly futures exchange market exit signal.
+ *
+ * @param {string} symbol Symbol code to trade without currency separation: i.e. BTCUSDT.
+ */
+export function composeFuturesMarketExitSignal(symbol: string, side: string) {
+  return assign(composeBaseExitSignal("Zignaly", "futures"), {
+    pair: symbol,
+    side: side,
     providerKey: process.env.ZIGNALY_PROVIDER_KEY,
   });
 }
