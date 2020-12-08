@@ -73,6 +73,7 @@ export function composeFuturesMarketEntrySignal(
   return assign(composeBaseEntrySignal("Zignaly", "futures", "market"), {
     pair: symbol,
     side: side,
+    signalId: `${symbol}_${side}`,
     positionSizePercentage: size,
     stopLossPercentage: stopLossPercentage || false,
     leverage: leverage || 1,
@@ -91,6 +92,7 @@ export function composeFuturesMarketExitSignal(symbol: string, side: string) {
   return assign(composeBaseExitSignal("Zignaly", "futures"), {
     pair: symbol,
     side: side,
+    signalId: `${symbol}_${side}`,
     providerKey: process.env.ZIGNALY_PROVIDER_KEY,
   });
 }
