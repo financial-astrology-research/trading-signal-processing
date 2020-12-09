@@ -23,11 +23,9 @@ export async function filterSignalDailyCsvIndicator(
   let dailyIndicator: any = null;
 
   let signalIndex1 = exchangeDateMoment.format("YYYY-MM-DD");
-  let signalIndex2 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
   // When more than half of current day is elapsed use trend indicator signals from next days.
-  if (signalHour > 14) {
-    signalIndex1 = signalIndex2;
-    signalIndex2 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
+  if (signalHour >= 13) {
+    signalIndex1 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
   }
 
   try {
@@ -55,14 +53,14 @@ export async function filterSignalDailyCsvIndicator(
   }
 
   const dailyIndicatorIndex = groupBy(dailyIndicator, "Date");
-  const signalIndexes = [signalIndex1, signalIndex2];
+  const signalIndexes = [signalIndex1];
   const signalDateIndicatorSignals = flatten(
     values(pick(dailyIndicatorIndex, signalIndexes)),
   );
 
   if (!signalDateIndicatorSignals) {
     throw new Error(
-      `No CSV ${indicatorFile} indicator signals found for date ${signalIndex1}`,
+      `No CSV ${indicatorFile} indicator signals found for date(s) ${signalIndexes.toString()}`,
     );
   }
 
