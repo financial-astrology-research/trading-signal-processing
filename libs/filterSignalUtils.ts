@@ -19,12 +19,13 @@ export async function filterSignalDailyCsvIndicator(
   const sideAction = side == "long" ? "buy" : "sell";
   const dateTime = `${date} ${hour}`;
   const exchangeDateMoment = moment.utc(dateTime, "YYYY-M-D H:m:s");
-  const signalHour: number = parseInt(exchangeDateMoment.format("H"));
+  const currentHour: number = new Date().getUTCHours();
   let dailyIndicator: any = null;
 
+  console.log("Using to determine day index the UTC hour:", currentHour);
   let signalIndex1 = exchangeDateMoment.format("YYYY-MM-DD");
   // When more than half of current day is elapsed use trend indicator signals from next days.
-  if (signalHour >= 13) {
+  if (currentHour >= 11) {
     signalIndex1 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
   }
 
