@@ -15,7 +15,7 @@ export async function filterSignalDailyCsvIndicator(
   signalData: TradingViewStrategySignal,
 ) {
   const { symbolCode, side, date, hour } = signalData;
-  const indicatorFile = `ml-${symbolCode}-daily.csv`;
+  const indicatorFile = `ml-${symbolCode}-daily-consensus.csv`;
   const sideAction = side == "long" ? "buy" : "sell";
   const dateTime = `${date} ${hour}`;
   const exchangeDateMoment = moment.utc(dateTime, "YYYY-M-D H:m:s");
