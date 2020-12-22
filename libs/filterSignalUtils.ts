@@ -25,7 +25,7 @@ export async function filterSignalDailyCsvIndicator(
   console.log("Using to determine day index the UTC hour:", currentHour);
   let signalIndex1 = exchangeDateMoment.format("YYYY-MM-DD");
   // When more than half of current day is elapsed use trend indicator signals from next days.
-  if (currentHour >= 11) {
+  if (currentHour >= 10) {
     signalIndex1 = exchangeDateMoment.add(1, "days").format("YYYY-MM-DD");
   }
 
