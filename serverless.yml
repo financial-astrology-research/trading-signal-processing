@@ -22,6 +22,14 @@ functions:
           path: /trading-view-strategy-signal
           method: post
 
+resources:
+  Resources:
+    DataBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${env:S3_INDICATORS_BUCKET}
+        AccessControl: BucketOwnerFullControl
+
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
